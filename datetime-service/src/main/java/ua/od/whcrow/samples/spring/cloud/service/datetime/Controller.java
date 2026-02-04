@@ -1,6 +1,7 @@
 package ua.od.whcrow.samples.spring.cloud.service.datetime;
 
 import jakarta.annotation.PostConstruct;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,10 +22,17 @@ class Controller {
 		formatter = DateTimeFormatter.ofPattern(format);
 	}
 	
-	@GetMapping("/")
-	public DatetimeDto hp() {
+	@NonNull
+	@GetMapping(version = "1")
+	public DatetimeDtoV1 version1() {
+		return new DatetimeDtoV1(formatter.format(ZonedDateTime.now()));
+	}
+	
+	@NonNull
+	@GetMapping(version = "2")
+	public DatetimeDtoV2 version2() {
 		var datetime = ZonedDateTime.now();
-		return new DatetimeDto(format, datetime, formatter.format(datetime));
+		return new DatetimeDtoV2(format, datetime, formatter.format(datetime));
 	}
 	
 }
